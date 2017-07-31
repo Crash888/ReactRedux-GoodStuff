@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import { Field, reduxForm } from 'redux-form';
+import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { createPost } from '../actions';
 
 class PostsNew extends Component {
 
@@ -24,7 +27,12 @@ class PostsNew extends Component {
 	}
 
 	onSubmit(values) {
-		console.log(values);
+		this.props.createPost(values, () => {
+			//  Route options.  This will navigate us to another location
+			//  in the app.  Properties part of the Route creation back in
+			//  index.js
+			this.props.history.push('/');
+		});
 	}
 
 	render() {
@@ -52,6 +60,9 @@ class PostsNew extends Component {
 					className="btn btn-primary">
 						Submit
 				</button>
+				<Link to="/" className="btn btn-danger">
+					Cancel
+				</Link>
 			</form>
 		)
 	}
@@ -86,4 +97,11 @@ export default reduxForm(
 		//  Name of the form
 		form: 'PostsNewForm'
 	}
-)(PostsNew)
+)(
+	connect(
+		null, 
+		{ createPost } 
+	)(PostsNew)
+);
+
+
